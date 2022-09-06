@@ -1,0 +1,18 @@
+[features]
+seeds = false
+skip-lint = false
+[programs.localnet]
+token_rewards = "7vAPv3w9A49i2pEdKhJo9MKKnYT8M9rTZM98f6qP3eRf"
+
+[programs.devnet]
+token_rewards = "7vAPv3w9A49i2pEdKhJo9MKKnYT8M9rTZM98f6qP3eRf"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "devnet"
+wallet = "/home/johnliu/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
