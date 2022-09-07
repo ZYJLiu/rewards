@@ -11,8 +11,8 @@ pub struct MintReward<'info> {
      constraint = merchant.user == user.key())]
     pub merchant: Account<'info, MerchantState>,
 
-    #[account(mut,
-        seeds = [REWARD_SEED],
+    #[account(
+        seeds = [REWARD_SEED, merchant.key().as_ref()],
         bump = merchant.mint_bump
     )]
     pub reward_mint: Account<'info, Mint>,
@@ -52,7 +52,13 @@ pub struct MintReward<'info> {
 
 impl MintReward<'_> {
     pub fn actuate(ctx: &mut Context<Self>, params: &MintRewardParams) -> Result<()> {
-        let seeds = &[REWARD_SEED, &[ctx.accounts.merchant.mint_bump]];
+        let merchant = ctx.accounts.merchant.key();
+
+        let seeds = &[
+            REWARD_SEED,
+            merchant.as_ref(),
+            &[ctx.accounts.merchant.mint_bump],
+        ];
         let signer = [&seeds[..]];
 
         msg!("Transfer Tokens");

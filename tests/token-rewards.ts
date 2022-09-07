@@ -44,31 +44,31 @@ describe("token-rewards", () => {
     )
   })
 
-  // it("Initialize Merchant Account", async () => {
-  //   let name = "name"
-  //   let image =
-  //     "https://arweave.net/8APPIUAigWaUpEt5jC10M1-dgNGaN9kbr1yNI1qv20U?ext=png"
+  it("Initialize Merchant Account", async () => {
+    let name = "name"
+    let image =
+      "https://arweave.net/8APPIUAigWaUpEt5jC10M1-dgNGaN9kbr1yNI1qv20U?ext=png"
 
-  //   const tx = await program.methods
-  //     .initMerchant({
-  //       name: name,
-  //       image: image,
-  //     })
-  //     .accounts({
-  //       merchant: merchantPDA,
-  //       user: userWallet.publicKey,
-  //       systemProgram: SystemProgram.programId,
-  //       rent: SYSVAR_RENT_PUBKEY,
-  //     })
-  //     .rpc()
-  //   // console.log("Your transaction signature", tx)
+    const tx = await program.methods
+      .initMerchant({
+        name: name,
+        image: image,
+      })
+      .accounts({
+        merchant: merchantPDA,
+        user: userWallet.publicKey,
+        systemProgram: SystemProgram.programId,
+        rent: SYSVAR_RENT_PUBKEY,
+      })
+      .rpc()
+    // console.log("Your transaction signature", tx)
 
-  //   const merchantAccount = await program.account.merchantState.fetch(
-  //     merchantPDA
-  //   )
-  //   expect(merchantAccount.name).to.equal(name)
-  //   expect(merchantAccount.image).to.equal(image)
-  // })
+    const merchantAccount = await program.account.merchantState.fetch(
+      merchantPDA
+    )
+    expect(merchantAccount.name).to.equal(name)
+    expect(merchantAccount.image).to.equal(image)
+  })
 
   // it("Create Promo", async () => {
   //   let count = await (
@@ -204,73 +204,73 @@ describe("token-rewards", () => {
   //   // expect(merchantAccount.mintBump).to.equal(rewardMintBump)
   // })
 
-  it("Gift Tokens", async () => {
-    const rewardTokenAccount = await getOrCreateAssociatedTokenAccount(
-      connection,
-      userWallet.payer,
-      rewardMintPDA,
-      userWallet.publicKey
-    )
+  // it("Gift Tokens", async () => {
+  //   const rewardTokenAccount = await getOrCreateAssociatedTokenAccount(
+  //     connection,
+  //     userWallet.payer,
+  //     rewardMintPDA,
+  //     userWallet.publicKey
+  //   )
 
-    const usdcTokenAccount = await getOrCreateAssociatedTokenAccount(
-      connection,
-      userWallet.payer,
-      usdcMint,
-      userWallet.publicKey
-    )
+  //   const usdcTokenAccount = await getOrCreateAssociatedTokenAccount(
+  //     connection,
+  //     userWallet.payer,
+  //     usdcMint,
+  //     userWallet.publicKey
+  //   )
 
-    const tx = await program.methods
-      .mintReward({
-        amount: new anchor.BN(1000000),
-      })
-      .accounts({
-        merchant: merchantPDA,
-        rewardMint: rewardMintPDA,
-        usdcMint: usdcMint,
-        customerRewardToken: rewardTokenAccount.address,
-        customerUsdcToken: usdcTokenAccount.address,
-        userUsdcToken: usdcTokenAccount.address,
-        user: userWallet.publicKey,
-        customer: userWallet.publicKey,
-        tokenProgram: TOKEN_PROGRAM_ID,
-      })
-      .rpc()
+  //   const tx = await program.methods
+  //     .mintReward({
+  //       amount: new anchor.BN(1000000),
+  //     })
+  //     .accounts({
+  //       merchant: merchantPDA,
+  //       rewardMint: rewardMintPDA,
+  //       usdcMint: usdcMint,
+  //       customerRewardToken: rewardTokenAccount.address,
+  //       customerUsdcToken: usdcTokenAccount.address,
+  //       userUsdcToken: usdcTokenAccount.address,
+  //       user: userWallet.publicKey,
+  //       customer: userWallet.publicKey,
+  //       tokenProgram: TOKEN_PROGRAM_ID,
+  //     })
+  //     .rpc()
 
-    console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`)
-  })
+  //   console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`)
+  // })
 
-  it("Burn Tokens", async () => {
-    const rewardTokenAccount = await getOrCreateAssociatedTokenAccount(
-      connection,
-      userWallet.payer,
-      rewardMintPDA,
-      userWallet.publicKey
-    )
+  // it("Burn Tokens", async () => {
+  //   const rewardTokenAccount = await getOrCreateAssociatedTokenAccount(
+  //     connection,
+  //     userWallet.payer,
+  //     rewardMintPDA,
+  //     userWallet.publicKey
+  //   )
 
-    // const usdcTokenAccount = await getOrCreateAssociatedTokenAccount(
-    //   connection,
-    //   userWallet.payer,
-    //   usdcMint,
-    //   userWallet.publicKey
-    // )
+  //   // const usdcTokenAccount = await getOrCreateAssociatedTokenAccount(
+  //   //   connection,
+  //   //   userWallet.payer,
+  //   //   usdcMint,
+  //   //   userWallet.publicKey
+  //   // )
 
-    const tx = await program.methods
-      .burnReward({
-        amount: new anchor.BN(1000000),
-      })
-      .accounts({
-        merchant: merchantPDA,
-        rewardMint: rewardMintPDA,
-        // usdcMint: usdcMint,
-        customerRewardToken: rewardTokenAccount.address,
-        // customerUsdcToken: usdcTokenAccount.address,
-        // userUsdcToken: usdcTokenAccount.address,
-        user: userWallet.publicKey,
-        customer: userWallet.publicKey,
-        tokenProgram: TOKEN_PROGRAM_ID,
-      })
-      .rpc()
+  //   const tx = await program.methods
+  //     .burnReward({
+  //       amount: new anchor.BN(1000000),
+  //     })
+  //     .accounts({
+  //       merchant: merchantPDA,
+  //       rewardMint: rewardMintPDA,
+  //       // usdcMint: usdcMint,
+  //       customerRewardToken: rewardTokenAccount.address,
+  //       // customerUsdcToken: usdcTokenAccount.address,
+  //       // userUsdcToken: usdcTokenAccount.address,
+  //       user: userWallet.publicKey,
+  //       customer: userWallet.publicKey,
+  //       tokenProgram: TOKEN_PROGRAM_ID,
+  //     })
+  //     .rpc()
 
-    console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`)
-  })
+  //   console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`)
+  // })
 })

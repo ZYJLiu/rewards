@@ -15,7 +15,7 @@ pub struct CreateReward<'info> {
 
     #[account(
         init,
-        seeds = [REWARD_SEED],
+        seeds = [REWARD_SEED, merchant.key().as_ref()],
         bump,
         payer = user,
         mint::decimals = 6,
@@ -39,8 +39,13 @@ pub struct CreateReward<'info> {
 impl CreateReward<'_> {
     pub fn actuate(ctx: &mut Context<Self>, params: &CreateRewardParams) -> Result<()> {
         msg!("Create Reward Token");
+        let merchant = ctx.accounts.merchant.key();
 
-        let seeds = &[REWARD_SEED, &[*ctx.bumps.get("reward_mint").unwrap()]];
+        let seeds = &[
+            REWARD_SEED,
+            merchant.as_ref(),
+            &[*ctx.bumps.get("reward_mint").unwrap()],
+        ];
 
         let signer = [&seeds[..]];
 
