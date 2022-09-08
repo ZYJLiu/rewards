@@ -1,5 +1,6 @@
 use crate::*;
 
+// add reward basis point here
 #[account]
 pub struct MerchantState {
     pub user: Pubkey,     // 32
