@@ -42,7 +42,7 @@ pub struct CreatePromo<'info> {
     #[account(mut)]
     pub metadata: AccountInfo<'info>,
     #[account(address = mpl_token_metadata::id())]
-    pub token_metadata_program: AccountInfo<'info>,
+    pub token_metadata_program: Program<'info, TokenMetadata>,
 }
 
 impl CreatePromo<'_> {
@@ -99,7 +99,7 @@ impl CreatePromo<'_> {
 
         msg!("Update Merchant Promo Count");
         let merchant = &mut ctx.accounts.merchant;
-        merchant.promo_count += 1;
+        merchant.promo_count = merchant.promo_count.checked_add(1).unwrap();
 
         Ok(())
     }

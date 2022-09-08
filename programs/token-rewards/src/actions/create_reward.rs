@@ -33,7 +33,7 @@ pub struct CreateReward<'info> {
     #[account(mut)]
     pub metadata: AccountInfo<'info>,
     #[account(address = mpl_token_metadata::id())]
-    pub token_metadata_program: AccountInfo<'info>,
+    pub token_metadata_program: Program<'info, TokenMetadata>,
 }
 
 impl CreateReward<'_> {
