@@ -11,14 +11,14 @@ pub struct MintReward<'info> {
      constraint = merchant.user == user.key())]
     pub merchant: Account<'info, MerchantState>,
 
-    #[account(
+    #[account(mut,
         seeds = [REWARD_SEED, merchant.key().as_ref()],
         bump = merchant.mint_bump
     )]
     pub reward_mint: Account<'info, Mint>,
 
     #[account(
-        address = USDC_MINT_ADDRESS.parse::<Pubkey>().unwrap(),
+        // address = USDC_MINT_ADDRESS.parse::<Pubkey>().unwrap(),
     )]
     pub usdc_mint: Account<'info, Mint>,
 

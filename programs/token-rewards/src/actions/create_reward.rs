@@ -42,7 +42,7 @@ impl CreateReward<'_> {
         let merchant = ctx.accounts.merchant.key();
 
         let seeds = &[
-            REWARD_SEED,
+            &REWARD_SEED,
             merchant.as_ref(),
             &[*ctx.bumps.get("reward_mint").unwrap()],
         ];
