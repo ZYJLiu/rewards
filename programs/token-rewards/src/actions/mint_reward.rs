@@ -18,7 +18,7 @@ pub struct MintReward<'info> {
     pub reward_mint: Account<'info, Mint>,
 
     #[account(
-        address = USDC_MINT_ADDRESS.parse::<Pubkey>().unwrap(),
+        // address = USDC_MINT_ADDRESS.parse::<Pubkey>().unwrap(),
     )]
     pub usdc_mint: Account<'info, Mint>,
 

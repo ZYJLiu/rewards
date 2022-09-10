@@ -1,6 +1,7 @@
 use crate::*;
 
-// add reward basis point here
+// Merchant account state
+// TODO: add "giftcard" token discount/reward basis point here
 #[account]
 pub struct MerchantState {
     pub user: Pubkey,     // 32
@@ -11,6 +12,7 @@ pub struct MerchantState {
     pub name: String,     // 4 + len()
 }
 
+// Data for each "coupon" promotion
 #[account]
 pub struct PromoState {
     pub user: Pubkey, // 32

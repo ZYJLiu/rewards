@@ -15,32 +15,38 @@ declare_id!("7vAPv3w9A49i2pEdKhJo9MKKnYT8M9rTZM98f6qP3eRf");
 pub mod token_rewards {
     use super::*;
 
+    // initialize merchant account
     pub fn init_merchant(mut ctx: Context<InitMerchant>, params: InitMerchantParams) -> Result<()> {
         InitMerchant::actuate(&mut ctx, &params)
     }
 
+    // create new "coupon" mint
     pub fn create_promo(mut ctx: Context<CreatePromo>, params: CreatePromoParams) -> Result<()> {
         CreatePromo::actuate(&mut ctx, &params)
     }
 
+    // mint "coupon"
     pub fn mint_promo(mut ctx: Context<MintPromo>) -> Result<()> {
         MintPromo::actuate(&mut ctx)
     }
 
+    // create merchant "giftcard" token
     pub fn create_reward(mut ctx: Context<CreateReward>, params: CreateRewardParams) -> Result<()> {
         CreateReward::actuate(&mut ctx, &params)
     }
 
+    // mint "giftcard" tokens in exchange for "USDC" token
     pub fn mint_reward(mut ctx: Context<MintReward>, params: MintRewardParams) -> Result<()> {
         MintReward::actuate(&mut ctx, &params)
     }
 
+    // burn "giftcard" tokens, TODO: add optional two token input & logic to handle
     pub fn burn_reward(mut ctx: Context<BurnReward>, params: BurnRewardParams) -> Result<()> {
         BurnReward::actuate(&mut ctx, &params)
     }
 }
 
-const USDC_MINT_ADDRESS: &str = "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr";
+// const USDC_MINT_ADDRESS: &str = "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr";
 
 const MERCHANT_SEED: &[u8] = b"MERCHANT";
 const MINT_SEED: &[u8] = b"MINT";

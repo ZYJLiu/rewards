@@ -15,7 +15,6 @@ pub struct InitMerchant<'info> {
         bump,
         payer = user,
         space = 8 + 32 + 32 + 8 + 1 + 4 + params.name.len() + 4 + params.image.len()
-        // space = 8 + std::mem::size_of::<MerchantState>()
     )]
     pub merchant: Account<'info, MerchantState>,
     #[account(mut)]
