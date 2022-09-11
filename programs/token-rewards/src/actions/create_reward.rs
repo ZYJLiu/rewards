@@ -36,6 +36,7 @@ pub struct CreateReward<'info> {
     pub token_metadata_program: Program<'info, TokenMetadata>,
 }
 
+// create "gift card" token with metadata
 impl CreateReward<'_> {
     pub fn actuate(ctx: &mut Context<Self>, params: &CreateRewardParams) -> Result<()> {
         msg!("Create Reward Token");

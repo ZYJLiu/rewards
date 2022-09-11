@@ -21,6 +21,7 @@ pub struct MintPromo<'info> {
     pub user: Signer<'info>,
 }
 
+// distribute "coupon" token by minting
 impl MintPromo<'_> {
     pub fn actuate(ctx: &mut Context<Self>) -> Result<()> {
         let promo = ctx.accounts.promo.key();

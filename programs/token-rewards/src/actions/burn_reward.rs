@@ -48,6 +48,7 @@ pub struct BurnReward<'info> {
     pub token_program: Program<'info, Token>,
 }
 
+// redeem "gift" tokens by burning
 impl BurnReward<'_> {
     pub fn actuate(ctx: &mut Context<Self>, params: &BurnRewardParams) -> Result<()> {
         let cpi_ctx = CpiContext::new(

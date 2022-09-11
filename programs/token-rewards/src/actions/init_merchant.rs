@@ -23,6 +23,7 @@ pub struct InitMerchant<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
+// initialize new merchant account
 impl InitMerchant<'_> {
     pub fn actuate(ctx: &mut Context<Self>, params: &InitMerchantParams) -> Result<()> {
         msg!("Initialize Merchant Account");

@@ -45,6 +45,7 @@ pub struct CreatePromo<'info> {
     pub token_metadata_program: Program<'info, TokenMetadata>,
 }
 
+// create new "coupon" promotion with metadata
 impl CreatePromo<'_> {
     pub fn actuate(ctx: &mut Context<Self>, params: &CreatePromoParams) -> Result<()> {
         msg!("Create Promo");

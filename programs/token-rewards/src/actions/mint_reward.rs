@@ -50,6 +50,7 @@ pub struct MintReward<'info> {
     pub token_program: Program<'info, Token>,
 }
 
+// distribute "giftcard" token by minting, in exchange for transfer of another token
 impl MintReward<'_> {
     pub fn actuate(ctx: &mut Context<Self>, params: &MintRewardParams) -> Result<()> {
         let merchant = ctx.accounts.merchant.key();
