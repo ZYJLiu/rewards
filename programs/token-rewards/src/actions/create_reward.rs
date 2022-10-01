@@ -15,7 +15,7 @@ pub struct CreateReward<'info> {
 
     #[account(
         init,
-        seeds = [REWARD_SEED, merchant.key().as_ref()],
+        seeds = [REWARD_SEED.as_bytes(), merchant.key().as_ref()],
         bump,
         payer = user,
         mint::decimals = 6,
@@ -43,7 +43,7 @@ impl CreateReward<'_> {
         let merchant = ctx.accounts.merchant.key();
 
         let seeds = &[
-            &REWARD_SEED,
+            REWARD_SEED.as_bytes(),
             merchant.as_ref(),
             &[*ctx.bumps.get("reward_mint").unwrap()],
         ];

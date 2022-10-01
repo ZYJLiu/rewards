@@ -8,13 +8,13 @@ url = "https://api.mainnet-beta.solana.com"
 address = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
 
 [features]
-seeds = false
+seeds = true
 skip-lint = false
 [programs.localnet]
-token_rewards = "7vAPv3w9A49i2pEdKhJo9MKKnYT8M9rTZM98f6qP3eRf"
+token_rewards = "3wHwBiegty6hFBYSeEjS4c4wuBkeeCfHU8JN4SsHjEoC"
 
 [programs.devnet]
-token_rewards = "7vAPv3w9A49i2pEdKhJo9MKKnYT8M9rTZM98f6qP3eRf"
+token_rewards = "3wHwBiegty6hFBYSeEjS4c4wuBkeeCfHU8JN4SsHjEoC"
 
 [registry]
 url = "https://api.apr.dev"

@@ -24,7 +24,7 @@ pub struct CreatePromo<'info> {
 
     #[account(
         init,
-        seeds = [MINT_SEED, promo.key().as_ref()],
+        seeds = [MINT_SEED.as_bytes(), promo.key().as_ref()],
         bump,
         payer = user,
         mint::decimals = 0,
@@ -54,7 +54,7 @@ impl CreatePromo<'_> {
         let promo_data_key = ctx.accounts.promo.key();
 
         let seeds = &[
-            MINT_SEED,
+            MINT_SEED.as_bytes(),
             promo_data_key.as_ref(),
             &[*ctx.bumps.get("promo_mint").unwrap()],
         ];

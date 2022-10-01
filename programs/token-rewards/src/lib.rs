@@ -1,6 +1,9 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::program::invoke_signed;
-use anchor_spl::token::{self, Mint, MintTo, Token, TokenAccount};
+use anchor_spl::{
+    associated_token::AssociatedToken,
+    token::{self, Mint, MintTo, Token, TokenAccount},
+};
 use mpl_token_metadata::instruction::create_metadata_accounts_v2;
 use mpl_token_metadata::ID as mpl_token_metadata;
 
@@ -9,7 +12,7 @@ pub mod state;
 use actions::*;
 use state::*;
 
-declare_id!("7vAPv3w9A49i2pEdKhJo9MKKnYT8M9rTZM98f6qP3eRf");
+declare_id!("3wHwBiegty6hFBYSeEjS4c4wuBkeeCfHU8JN4SsHjEoC");
 
 #[program]
 pub mod token_rewards {
@@ -48,9 +51,13 @@ pub mod token_rewards {
 
 // const USDC_MINT_ADDRESS: &str = "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr";
 
-const MERCHANT_SEED: &[u8] = b"MERCHANT";
-const MINT_SEED: &[u8] = b"MINT";
-const REWARD_SEED: &[u8] = b"REWARD";
+const MERCHANT_SEED: &str = "MERCHANT";
+const MINT_SEED: &str = "MINT";
+const REWARD_SEED: &str = "REWARD";
+
+// const MERCHANT_SEED: &[u8] = b"MERCHANT";
+// const MINT_SEED: &[u8] = b"MINT";
+// const REWARD_SEED: &[u8] = b"REWARD";
 
 #[derive(Clone)]
 pub struct TokenMetadata;

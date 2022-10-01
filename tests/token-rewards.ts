@@ -84,10 +84,10 @@ describe("token-rewards", () => {
         image: image,
       })
       .accounts({
-        merchant: merchantPDA,
-        user: userWallet.publicKey,
-        systemProgram: SystemProgram.programId,
-        rent: SYSVAR_RENT_PUBKEY,
+        // merchant: merchantPDA,
+        // user: userWallet.publicKey,
+        // systemProgram: SystemProgram.programId,
+        // rent: SYSVAR_RENT_PUBKEY,
       })
       .rpc()
     // console.log("Your transaction signature", tx)
@@ -126,11 +126,11 @@ describe("token-rewards", () => {
       .accounts({
         merchant: merchantPDA,
         promo: promoDataPda,
-        promoMint: promoMintPda,
-        user: userWallet.publicKey,
-        systemProgram: SystemProgram.programId,
-        rent: SYSVAR_RENT_PUBKEY,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        // promoMint: promoMintPda,
+        // user: userWallet.publicKey,
+        // systemProgram: SystemProgram.programId,
+        // rent: SYSVAR_RENT_PUBKEY,
+        // tokenProgram: TOKEN_PROGRAM_ID,
         metadata: metadataPDA,
         tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
       })
@@ -169,11 +169,11 @@ describe("token-rewards", () => {
       .accounts({
         merchant: merchantPDA,
         promo: promoDataPda,
-        promoMint: promoMintPda,
-        user: userWallet.publicKey,
-        systemProgram: SystemProgram.programId,
-        rent: SYSVAR_RENT_PUBKEY,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        // promoMint: promoMintPda,
+        // user: userWallet.publicKey,
+        // systemProgram: SystemProgram.programId,
+        // rent: SYSVAR_RENT_PUBKEY,
+        // tokenProgram: TOKEN_PROGRAM_ID,
         metadata: metadataPDA,
         tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
       })
@@ -193,12 +193,75 @@ describe("token-rewards", () => {
       .accounts({
         promo: promoDataPda,
         promoMint: promoMintPda,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        // tokenProgram: TOKEN_PROGRAM_ID,
         tokenAccount: tokenAccount.address,
-        user: userWallet.publicKey,
+        // user: userWallet.publicKey,
       })
       .rpc()
-    console.log("Your transaction signature", tx2)
+    // console.log("Your transaction signature", tx2)
+
+    const account = await getAccount(connection, tokenAccount.address)
+    // console.log(account)
+    expect(Number(account.amount)).to.equal(1)
+  })
+
+  it("Create and Mint Promo", async () => {
+    let count = await (
+      await program.account.merchantState.fetch(merchantPDA)
+    ).promoCount
+    // console.log(count)
+
+    const [promoDataPda, promoDataBump] = await PublicKey.findProgramAddress(
+      [merchantPDA.toBuffer(), count.toBuffer("be", 8)],
+      program.programId
+    )
+
+    const [promoMintPda, promoMintBump] = await PublicKey.findProgramAddress(
+      [Buffer.from("MINT"), promoDataPda.toBuffer()],
+      program.programId
+    )
+
+    const metadataPDA = await findMetadataPda(promoMintPda)
+
+    const tx = await program.methods
+      .createPromo({
+        name: "NAME",
+        symbol: "SYMBOL",
+        uri: "https://arweave.net/OwXDf7SM6nCVY2cvQ4svNjtV7WBTz3plbI4obN9JNkk",
+      })
+      .accounts({
+        merchant: merchantPDA,
+        promo: promoDataPda,
+        // promoMint: promoMintPda,
+        // user: userWallet.publicKey,
+        // systemProgram: SystemProgram.programId,
+        // rent: SYSVAR_RENT_PUBKEY,
+        // tokenProgram: TOKEN_PROGRAM_ID,
+        metadata: metadataPDA,
+        tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+      })
+      .rpc()
+
+    const tokenAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      userWallet.payer,
+      promoMintPda,
+      userWallet.publicKey
+    )
+
+    // console.log(tokenAccount)
+
+    const tx2 = await program.methods
+      .mintPromo()
+      .accounts({
+        promo: promoDataPda,
+        promoMint: promoMintPda,
+        // tokenProgram: TOKEN_PROGRAM_ID,
+        tokenAccount: tokenAccount.address,
+        // user: userWallet.publicKey,
+      })
+      .rpc()
+    // console.log("Your transaction signature", tx2)
 
     const account = await getAccount(connection, tokenAccount.address)
     // console.log(account)
@@ -217,10 +280,10 @@ describe("token-rewards", () => {
       .accounts({
         merchant: merchantPDA,
         rewardMint: rewardMintPDA,
-        user: userWallet.publicKey,
-        systemProgram: SystemProgram.programId,
-        rent: SYSVAR_RENT_PUBKEY,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        // user: userWallet.publicKey,
+        // systemProgram: SystemProgram.programId,
+        // rent: SYSVAR_RENT_PUBKEY,
+        // tokenProgram: TOKEN_PROGRAM_ID,
         metadata: metadataPDA,
         tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
       })
@@ -250,22 +313,23 @@ describe("token-rewards", () => {
 
     const tx = await program.methods
       .mintReward({
-        amount: new anchor.BN(1000000),
+        amount: new anchor.BN(1_000_000),
       })
       .accounts({
         merchant: merchantPDA,
         rewardMint: rewardMintPDA,
         usdcMint: usdcMint,
-        customerRewardToken: rewardTokenAccount.address,
+        receiverRewardToken: rewardTokenAccount.address,
         customerUsdcToken: usdcTokenAccount.address,
-        userUsdcToken: usdcTokenAccount.address,
+        merchantUsdcToken: usdcTokenAccount.address,
         user: userWallet.publicKey,
-        customer: userWallet.publicKey,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        receiver: userWallet.publicKey,
+        // customer: userWallet.publicKey,
+        // tokenProgram: TOKEN_PROGRAM_ID,
       })
       .rpc()
 
-    console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`)
+    // console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`)
   })
 
   it("Burn Tokens", async () => {
@@ -295,11 +359,11 @@ describe("token-rewards", () => {
         // customerUsdcToken: usdcTokenAccount.address,
         // userUsdcToken: usdcTokenAccount.address,
         user: userWallet.publicKey,
-        customer: userWallet.publicKey,
-        tokenProgram: TOKEN_PROGRAM_ID,
+        // customer: userWallet.publicKey,
+        // tokenProgram: TOKEN_PROGRAM_ID,
       })
       .rpc()
 
-    console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`)
+    // console.log(`https://explorer.solana.com/tx/${tx}?cluster=devnet`)
   })
 })

@@ -12,7 +12,7 @@ pub struct MintReward<'info> {
     pub merchant: Account<'info, MerchantState>,
 
     #[account(mut,
-        seeds = [REWARD_SEED, merchant.key().as_ref()],
+        seeds = [REWARD_SEED.as_bytes(), merchant.key().as_ref()],
         bump = merchant.mint_bump
     )]
     pub reward_mint: Account<'info, Mint>,
@@ -22,32 +22,40 @@ pub struct MintReward<'info> {
     )]
     pub usdc_mint: Account<'info, Mint>,
 
-    #[account(mut,
-        constraint = customer_reward_token.mint == reward_mint.key(),
-        constraint = customer_reward_token.owner == customer.key()
+    #[account(
+        init_if_needed,
+        payer = customer,
+        associated_token::mint = reward_mint,
+        associated_token::authority = receiver
     )]
-    pub customer_reward_token: Account<'info, TokenAccount>,
+    pub receiver_reward_token: Box<Account<'info, TokenAccount>>,
 
     #[account(mut,
         constraint = customer_usdc_token.mint == usdc_mint.key(),
         constraint = customer_usdc_token.owner == customer.key()
     )]
-    pub customer_usdc_token: Account<'info, TokenAccount>,
+    pub customer_usdc_token: Box<Account<'info, TokenAccount>>,
 
     #[account(mut,
-        constraint = user_usdc_token.mint == usdc_mint.key(),
-        constraint = user_usdc_token.owner == user.key()
+        constraint = merchant_usdc_token.mint == usdc_mint.key(),
+        constraint = merchant_usdc_token.owner == user.key()
     )]
-    pub user_usdc_token: Account<'info, TokenAccount>,
+    pub merchant_usdc_token: Box<Account<'info, TokenAccount>>,
 
     /// CHECK:
     #[account(mut)]
     pub user: AccountInfo<'info>,
+    /// CHECK:
+    #[account(mut)]
+    pub receiver: AccountInfo<'info>,
 
     #[account(mut)]
     pub customer: Signer<'info>,
 
     pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub rent: Sysvar<'info, Rent>,
+    pub system_program: Program<'info, System>,
 }
 
 // distribute "giftcard" token by minting, in exchange for transfer of another token
@@ -56,7 +64,7 @@ impl MintReward<'_> {
         let merchant = ctx.accounts.merchant.key();
 
         let seeds = &[
-            REWARD_SEED,
+            REWARD_SEED.as_bytes(),
             merchant.as_ref(),
             &[ctx.accounts.merchant.mint_bump],
         ];
@@ -68,7 +76,7 @@ impl MintReward<'_> {
             token::Transfer {
                 from: ctx.accounts.customer_usdc_token.to_account_info(),
                 authority: ctx.accounts.customer.to_account_info(),
-                to: ctx.accounts.user_usdc_token.to_account_info(),
+                to: ctx.accounts.merchant_usdc_token.to_account_info(),
             },
         );
         token::transfer(cpi_ctx, params.amount)?;
@@ -76,7 +84,7 @@ impl MintReward<'_> {
         msg!("Minting Tokens");
         let cpi_accounts = MintTo {
             mint: ctx.accounts.reward_mint.to_account_info(),
-            to: ctx.accounts.customer_reward_token.to_account_info(),
+            to: ctx.accounts.receiver_reward_token.to_account_info(),
             authority: ctx.accounts.reward_mint.to_account_info(),
         };
         let cpi_program = ctx.accounts.token_program.to_account_info();

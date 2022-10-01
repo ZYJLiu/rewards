@@ -12,6 +12,12 @@ pub struct MerchantState {
     pub name: String,     // 4 + len()
 }
 
+impl MerchantState {
+    pub fn get_account_size(params: InitMerchantParams) -> usize {
+        return 8 + 32 + 32 + 1 + 8 + 4 + params.name.len() + 4 + params.image.len();
+    }
+}
+
 // Data for each "coupon" promotion
 #[account]
 pub struct PromoState {

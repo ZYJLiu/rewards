@@ -11,10 +11,10 @@ pub struct InitMerchantParams {
 pub struct InitMerchant<'info> {
     #[account(
         init,
-        seeds = [MERCHANT_SEED, user.key().as_ref()],
+        seeds = [MERCHANT_SEED.as_bytes(), user.key().as_ref()],
         bump,
         payer = user,
-        space = 8 + 32 + 32 + 8 + 1 + 4 + params.name.len() + 4 + params.image.len()
+        space = MerchantState::get_account_size(params)
     )]
     pub merchant: Account<'info, MerchantState>,
     #[account(mut)]

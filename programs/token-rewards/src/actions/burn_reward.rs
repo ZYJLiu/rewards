@@ -12,7 +12,7 @@ pub struct BurnReward<'info> {
     pub merchant: Account<'info, MerchantState>,
 
     #[account(mut,
-        seeds = [REWARD_SEED, merchant.key().as_ref()],
+        seeds = [REWARD_SEED.as_bytes(), merchant.key().as_ref()],
         bump = merchant.mint_bump
     )]
     pub reward_mint: Account<'info, Mint>,
